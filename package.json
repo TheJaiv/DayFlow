@@ -1,0 +1,17 @@
+{
+  "name": "dayflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DayFlow - tasks, timetable and habits across web, iOS and Android",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../app && npm install",
+    "dev:api": "cd backend && npm run dev",
+    "dev:web": "cd app && npm run web",
+    "dev:app": "cd app && npm start",
+    "migrate": "cd backend && npm run migrate:dev",
+    "studio": "cd backend && npm run studio",
+    "test:api": "cd backend && npm run test:api",
+    "typecheck": "cd backend && npm run typecheck && cd ../app && npx tsc --noEmit",
+    "build:web": "cd app && npx expo export --platform web"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "DayFlow",
+    "slug": "dayflow",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "dayflow",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jaiv.dayflow",
+      "icon": "./assets/expo.icon"
+    },
+    "android": {
+      "package": "com.jaiv.dayflow",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png",
+      "output": "single",
+      "name": "DayFlow",
+      "shortName": "DayFlow",
+      "display": "standalone",
+      "themeColor": "#0EA5E9",
+      "backgroundColor": "#0A0A0A"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0EA5E9",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

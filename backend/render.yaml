@@ -1,0 +1,66 @@
+# Render blueprint for the DayFlow API.
+# Create the service via Render -> New -> Blueprint, pointing at this repo.
+#
+# Note on the free plan: the service spins down after 15 minutes of inactivity
+# and takes 30-60s to wake. An uptime monitor hitting /health/db every 5
+# minutes keeps it warm AND keeps a free Supabase project from pausing. Render
+# grants 750 instance hours/month and a month is ~730 hours, so exactly one
+# always-on free service fits -- there is no room for a second.
+
+services:
+  - type: web
+    name: dayflow-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: backend
+
+    buildCommand: npm ci && npx prisma generate && npm run build
+
+    # Migrations run at start rather than at build: the build step has no
+    # database access on Render, and `migrate deploy` is idempotent, so a
+    # restart with nothing pending is a no-op.
+    startCommand: npx prisma migrate deploy && npm start
+
+    # Render polls this. It is the cheap liveness route, deliberately not the
+    # database one -- a transient DB blip should not cause a redeploy loop.
+    healthCheckPath: /health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # Render injects PORT; the app reads it.
+      - key: PORT
+        value: 10000
+
+      # Generated once by Render and then held stable. Never reuse the values
+      # from your local .env.
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+
+      - key: ACCESS_TOKEN_TTL
+        value: 15m
+      - key: REFRESH_TOKEN_TTL_DAYS
+        value: "30"
+
+      # Served over HTTPS in production, so the refresh cookie gets Secure.
+      - key: COOKIE_SECURE
+        value: "true"
+
+      # Set these two by hand in the Render dashboard after creating the
+      # service -- they contain your database password, so they must not live
+      # in a file that is committed.
+      #   DATABASE_URL  -> Supabase transaction pooler, port 6543, ?pgbouncer=true
+      #   DIRECT_URL    -> Supabase direct connection, port 5432
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+
+      # Your deployed web origin, e.g. https://dayflow.vercel.app
+      # Without this the browser blocks every request from the web app.
+      - key: CORS_ORIGINS
+        sync: false

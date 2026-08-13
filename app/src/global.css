@@ -1,0 +1,27 @@
+/* Web-only polish. React Native Web renders into #root, which needs an
+   explicit full height or a flex:1 screen collapses to nothing. Everything
+   else in the app is styled through the token system in src/theme. */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* The app paints its own background from the theme; this only stops a white
+   flash before the bundle mounts in dark mode. */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0b0d11;
+  }
+}
